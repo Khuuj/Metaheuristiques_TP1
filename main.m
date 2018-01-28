@@ -46,12 +46,12 @@
 %|-> bit-flip mutation 0->1, 1->0
 
 %FLOWCHART
-%initialisation=>(evaluation=>selection=>crossover=>mutation)*Gmax=>
+%initialization=>(evaluation=>selection=>crossover=>mutation)*Gmax=>
 
 function pop = main(N, L, Gmax, pc, pm, f, M)
 scores = zeros(Gmax, N); %scores is a matrix of scores
 pop = zeros(Gmax, N, L); %pop is a matrix of chromosomes
-pop(1,:,:) = initialisation(N, L);
+pop(1,:,:) = initialization(N, L);
 for i=1:Gmax
     scores(i,:)=evaluation(pop, f);
     matingPool=selection(scores(i,:), M, pop(i,:,:)); %matingPool is a vector of chromosomes
