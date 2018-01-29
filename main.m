@@ -55,8 +55,8 @@ pop(1,:,:) = initialization(N, L);
 for i=1:Gmax
     scores(i,:)=evaluation(pop, f);
     matingPool=selection(scores(i,:), M, pop(i,:,:)); %matingPool is a vector of chromosomes
-    children = crossover(matingPool, pc); %children is a vector of chromosomes
-    pop(i+1, :, :) = mutation(children, pm); 
+    children = crossover(matingPool, pc, N, L, crossoverFunction); %children is a vector of chromosomes
+    pop(i+1, :, :) = mutation(children, pm, mutationFunction); 
 end
 end
 
