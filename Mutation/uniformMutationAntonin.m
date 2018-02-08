@@ -1,4 +1,4 @@
-function child = uniformMutation(pm, lower, upper, child)
+function child = uniformMutationAntonin(pm, lower, upper, child)
 len = length(lower);
 for i=1:len
     if rand<pm

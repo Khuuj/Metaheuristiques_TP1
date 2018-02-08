@@ -1,7 +1,7 @@
-function selected = rws(N, scoresi)
+function selected = rws(M, scoresi)
 fitnessSum = sum(scoresi);
-selected = zeros(1,N);
-for i=1:N
+selected = zeros(M,1);
+for i=1:M
     r = rand;
     while r==1
         r = rand;

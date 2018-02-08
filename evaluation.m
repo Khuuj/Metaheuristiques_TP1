@@ -3,9 +3,9 @@ scores = fitness(popg);
 
 switch scaling
     case 1
-        linearScaling(scores);
+        scores = linearScaling(scores);
     case 2
-        sigmaScaling(scores);
+        scores = sigmaScaling(scores);
     otherwise
         % No scaling
 end

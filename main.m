@@ -52,22 +52,23 @@
 %FLOWCHART
 %initialisation=>(evaluation=>selection=>crossover=>mutation)*Gmax=>
 
-function pop = main(N, L, Gmax, pc, pm, fitness, M, selectionFunction, crossoverFunction, mutationFunction, binary, b, scaling, optimalValue)
+function pop = main(N, L, Gmax, pc, pm, fitness, M, selectionFunction, crossoverFunction, mutationFunction, binary, lower, upper, b, scaling, optimalValue, threshold)
 scores = zeros(Gmax, N); %scores is a matrix of scores
 pop = zeros(Gmax, N, L); %pop is a matrix of chromosomes
 %f=@fitness;
-pop(1,:,:) = initialization(N, L, binary);
+pop(1,:,:) = initialization(N, L, binary, lower, upper);
 fitnessMean = 0;
 for g=1:Gmax
-	scores(g,:)=evaluation(pop(g, :, :), fitness, scaling);
+    popg = reshape(pop(g,:, :), [N, L]);    
+	scores(g,:)=evaluation(popg, fitness, scaling);
     if (stoppingCriteria(scores, fitnessMean, threshold, optimalValue))
         break;
     end
     fitnessMean = mean(scores);
     
-    matingPool=selection(scores(g,:), M, L, pop(g,:,:), selectionFunction); %matingPool is a vector of chromosomes
+    matingPool=selection(scores(g,:), M, L, popg, selectionFunction); %matingPool is a vector of chromosomes
     children = crossover(matingPool, pc, L, crossoverFunction); %children is a vector of chromosomes
-    pop(g+1, :, :) = mutation(children, pm, mutationFunction, b, Gmax, g); 
+    pop(g+1, :, :) = mutation(children, pm, mutationFunction, b, Gmax, g, lower, upper); 
 end
 end
 
