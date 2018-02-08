@@ -1,5 +1,5 @@
-function scores = evaluation(popi, fitness, scaling)
-scores = fitness(popi(:));
+function scores = evaluation(popg, fitness, scaling)
+scores = fitness(popg);
 
 switch scaling
     case 1

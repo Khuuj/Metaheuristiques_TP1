@@ -66,7 +66,7 @@ for g=1:Gmax
     fitnessMean = mean(scores);
     
     matingPool=selection(scores(g,:), M, L, pop(g,:,:), selectionFunction); %matingPool is a vector of chromosomes
-    children = crossover(matingPool, pc, N, L, crossoverFunction); %children is a vector of chromosomes
+    children = crossover(matingPool, pc, L, crossoverFunction); %children is a vector of chromosomes
     pop(g+1, :, :) = mutation(children, pm, mutationFunction, b, Gmax, g); 
 end
 end
