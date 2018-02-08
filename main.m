@@ -1,10 +1,14 @@
 
-%AG(N, L, Gmax, pc, pm, f, M)
+%AG(N, L, Gmax, pc, pm, f, M, binary, b)
 % N is the size of the population 
 % L size of binary numbers (chromosome length)
 % Gmax generation limit
 % pc probability rate of a crossover
 % pm probability rate of a mutation of a gene
+% binary is wheter we use binary (1) or real (0) encoding
+% b is a parameter for nonUniformMutation (controls the speed of the simulated annealing)
+% scaling (1 to use linearScaling, 2 for sigmaScaling and anything else if you want no scaling) 
+% optimalValue when reached, the algorithm is stopped
 
 %xi is the ith indivdual
 %xi,j is the jth gene of ith indivdual
@@ -48,15 +52,21 @@
 %FLOWCHART
 %initialization=>(evaluation=>selection=>crossover=>mutation)*Gmax=>
 
-function pop = main(N, L, Gmax, pc, pm, f, M)
+function pop = main(N, L, Gmax, pc, pm, f, M, binary, b, scaling, optimalValue)
 scores = zeros(Gmax, N); %scores is a matrix of scores
 pop = zeros(Gmax, N, L); %pop is a matrix of chromosomes
-pop(1,:,:) = initialization(N, L);
-for i=1:Gmax
-    scores(i,:)=evaluation(pop, f);
-    matingPool=selection(scores(i,:), M, pop(i,:,:)); %matingPool is a vector of chromosomes
+pop(1,:,:) = initialization(N, L, binary);
+fitnessMean = 0;
+for g=1:Gmax
+    scores(g,:)=evaluation(pop, f, scaling);
+    if (stoppingCriteria(scores, fitnessMean, threshold, optimalValue))
+        break;
+    end
+    fitnessMean = mean(scores);
+    
+    matingPool=selection(scores(g,:), M, pop(g,:,:)); %matingPool is a vector of chromosomes
     children = crossover(matingPool, pc, N, L, crossoverFunction); %children is a vector of chromosomes
-    pop(i+1, :, :) = mutation(children, pm, mutationFunction); 
+    pop(g+1, :, :) = mutation(children, pm, mutationFunction, b, Gmax, g); 
 end
 end
 
