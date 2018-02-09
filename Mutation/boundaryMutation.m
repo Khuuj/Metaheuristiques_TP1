@@ -1,4 +1,4 @@
-function child = boundaryMutation(pm, child, upper, lower)
+function child = boundaryMutation(child, pm, lower, upper, ~, ~, ~, ~, ~)
 for i=1:length(child)
         if rand<pm
             if rand>0.5

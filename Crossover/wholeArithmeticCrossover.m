@@ -1,4 +1,4 @@
-function children = wholeArithmeticCrossover(firstParent, secondParent)
+function children = wholeArithmeticCrossover(firstParent, secondParent, ~)
 alpha = rand;
 beta = 1 - alpha;
 

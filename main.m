@@ -1,4 +1,3 @@
-
 %AG(N, L, Gmax, pc, pm, f, M, binary, b)
 % N is the size of the population 
 % L size of binary numbers (chromosome length)
@@ -7,7 +6,7 @@
 % pm probability rate of a mutation of a gene
 % binary is wheter we use binary (1) or real (0) encoding
 % b is a parameter for nonUniformMutation (controls the speed of the simulated annealing)
-% scaling (1 to use linearScaling, 2 for sigmaScaling and anything else if you want no scaling) 
+% scalingFunction (@linearScaling or @sigmaScaling) 
 % optimalValue when reached, the algorithm is stopped
 
 %xi is the ith indivdual
@@ -52,24 +51,82 @@
 %FLOWCHART
 %initialisation=>(evaluation=>selection=>crossover=>mutation)*Gmax=>
 
-function pop = main(N, L, Gmax, pc, pm, fitness, M, selectionFunction, crossoverFunction, mutationFunction, binary, b, scaling, optimalValue)
-scores = zeros(Gmax, N); %scores is a matrix of scores
-pop = zeros(Gmax, N, L); %pop is a matrix of chromosomes
-%f=@fitness;
-pop(1,:,:) = initialization(N, L, binary);
-fitnessMean = 0;
-for g=1:Gmax
-	scores(g,:)=evaluation(pop(g, :, :), fitness, scaling);
-    if (stoppingCriteria(scores, fitnessMean, threshold, optimalValue))
-        break;
-    end
-    fitnessMean = mean(scores);
+function pop = main()
+    %% CONFIGURATION PART
+
+    %GENERAL SETTINGS
+    N = 100; %Population size
+    L = 2; %Chromosome size (2 in case of real encoding)
+    Gmax = 20; %Generation max
+    pc = 0.5; %Crossover probability
+    pm = 0.1; %Mutation probability
+    M = 100; %MatingPool size
+    binary = 0; %Encoding mode
     
-    matingPool=selection(scores(g,:), M, L, pop(g,:,:), selectionFunction); %matingPool is a vector of chromosomes
-    children = crossover(matingPool, pc, L, crossoverFunction); %children is a vector of chromosomes
-    pop(g+1, :, :) = mutation(children, pm, mutationFunction, b, Gmax, g); 
+    %FITNESS AND LIMITATIONS
+    fitnessFunction = @rosenbrock;
+    lower = [0 0];
+    upper = [2 3];
+%     fitnessFunction = @griewank;
+%     lower = [-30 -30];
+%     upper = [30 30];
+       
+
+    %SCALING
+    scalingFunction = @linearScaling;
+%     scalingFunction = @sigmaScaling; %need c
+    c = 2; %Control parameter : integer between [1,5]
+    
+    %SELECTION
+    selectionFunction = @rws;
+%     selectionFunction = @stochasticUniversalSampling;
+%     selectionFunction = @tournamentSelection; %need k
+    k = 2; %size of tournament
+    
+    %CROSSOVER
+    crossoverFunction = @blendCrossover; %need alpha
+%     crossoverFunction = @localArithmeticCrossover;
+%     crossoverFunction = @multiPointCrossover;
+%     crossoverFunction = @singlePointCrossover;
+%     crossoverFunction = @uniformCrossover; 
+%     crossoverFunction = @wholeArithmeticCrossover;
+    alpha = 0.5; %control the scope of the expansion
+    
+    %MUTATION
+    mutationFunction = @boundaryMutation;
+%     mutationFunction = @nonUniformMutation; %need b
+%     mutationFunction = @normalMutation; %need sigmaVector
+%     mutationFunction = @polynomialMutation; %need n
+%     mutationFunction = @uniformMutation;
+    b = 1; %control the speed of the annealing
+    %TODO : what value should take sigmaVector ?
+    sigmaVector = ones(L,1); %standard deviation vector
+    %TODO : what value should take n ?
+    n = 1; %control parameter
+    
+    %STOPPING CONDITIONS
+    threshold = 0; 
+    optimalValue = 10000;
+
+    %% EXECUTION PART
+    scores = zeros(Gmax, N); %scores is a matrix of scores
+    pop = zeros(Gmax, N, L); %pop is a matrix of chromosomes
+    %f=@fitness;
+    pop(1,:,:) = initialization(N, L, binary, lower, upper);
+    fitnessMean = 0;
+    for g=1:Gmax
+        scores(g,:)=evaluation(fitnessFunction, pop(g, :, :), scalingFunction, c);
+        if (stoppingCriteria(scores, fitnessMean, threshold, optimalValue))
+            break;
+        end
+        fitnessMean = mean(scores);
+
+        matingPool=selection(selectionFunction, scores(g,:), M, L, pop(g,:,:), k); %matingPool is a vector of chromosomes
+        children = crossover(crossoverFunction, matingPool, pc, L, alpha); %children is a vector of chromosomes
+        pop(g+1, :, :) = mutation(mutationFunction, children, pm, lower, upper, b, g, Gmax, n, sigmaVector); 
+    end
 end
-end
+
 
     
 

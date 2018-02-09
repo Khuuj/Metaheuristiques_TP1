@@ -1,4 +1,4 @@
-function scores = linearScaling(scores)
+function scores = linearScaling(scores, ~)
     fmin = min(scores);
     fmean = mean(scores);
     fmax = max(scores);

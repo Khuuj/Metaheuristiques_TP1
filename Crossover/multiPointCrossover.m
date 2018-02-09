@@ -1,4 +1,4 @@
-function children = multiPointCrossover(firstParent, secondParent)
+function children = multiPointCrossover(firstParent, secondParent, ~)
     L = length(firstParent);
     firstChild = firstParent;
     secondChild = secondParent;

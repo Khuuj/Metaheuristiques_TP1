@@ -1,4 +1,6 @@
-function children = uniformCrossover(p, firstParent, secondParent)
+function children = uniformCrossover(firstParent, secondParent, ~)
+%TODO : determine p
+
 for i=1:length(firstParent)
     if p<rand
         temp=firstParent(i);

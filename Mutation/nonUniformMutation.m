@@ -1,4 +1,4 @@
-function child = nonUniformMutation(pm, child, lower, upper, b, Gmax, g)
+function child = nonUniformMutation(child, pm, lower, upper, b, g, Gmax, ~, ~)
 for i=1:length(child)
         if rand<pm
             if rand>=0.5
@@ -11,5 +11,5 @@ end
 end
 
 function d = delta(g, y, b, Gmax)
-    d = y*(1 - rand((1 - g)/Gmax)^b);
+    d = y*(1 - rand^((1 - g)/Gmax)^b);
 end

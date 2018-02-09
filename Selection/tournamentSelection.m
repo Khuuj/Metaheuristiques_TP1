@@ -1,10 +1,15 @@
-function indice = tournamentSelection(scoresi, k)
-    best = 0;
-    for i=1:k
-        pos = randi(length(scoresi));
-        if best < scoresi(pos)
-            best = scoresi(pos);
-            indice = pos;
+function selected = tournamentSelection(scoresg, M, k)
+    selected = zeros(M,1);
+    for j=1:M
+        best = 0;
+        for i=1:k
+            pos = randi(length(scoresg));
+            if best < scoresg(pos)
+                best = scoresg(pos);
+                indice = pos;
+            end
         end
+        selected(j) = indice;
     end
+    
 end
