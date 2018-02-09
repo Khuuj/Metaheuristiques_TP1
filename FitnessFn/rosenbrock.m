@@ -8,6 +8,7 @@ function scores = rosenbrock(popg)
         a = x.*x;
         b = y - a;
 
+        %result = -((1 - a) + 100*(b .* b));
         result = -((1 - a) + 100*(b .* b));
         scores(i) = result;
     end

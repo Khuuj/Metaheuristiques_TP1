@@ -2,7 +2,7 @@ function children = uniformCrossover(firstParent, secondParent, ~)
 %TODO : determine p
 
 for i=1:length(firstParent)
-    if p<rand
+    if rand<p
         temp=firstParent(i);
         firstParent(i) = secondParent(i);
         secondParent(i)=temp;

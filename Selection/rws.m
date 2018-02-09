@@ -1,6 +1,6 @@
 function selected = rws(scoresg, M, ~)
     fitnessSum = sum(scoresg);
-    selected = zeros(1,M);
+    selected = zeros(M,1);
     for i=1:M
         r = rand;
         while r==1

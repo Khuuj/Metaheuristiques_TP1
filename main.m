@@ -111,17 +111,17 @@ function pop = main()
     %% EXECUTION PART
     scores = zeros(Gmax, N); %scores is a matrix of scores
     pop = zeros(Gmax, N, L); %pop is a matrix of chromosomes
-    %f=@fitness;
     pop(1,:,:) = initialization(N, L, binary, lower, upper);
     fitnessMean = 0;
     for g=1:Gmax
-        scores(g,:)=evaluation(fitnessFunction, pop(g, :, :), scalingFunction, c);
+    	popg = reshape(pop(g,:, :), [N, L]);    
+        scores(g,:)=evaluation(fitnessFunction, popg, scalingFunction, c);
         if (stoppingCriteria(scores, fitnessMean, threshold, optimalValue))
             break;
         end
         fitnessMean = mean(scores);
 
-        matingPool=selection(selectionFunction, scores(g,:), M, L, pop(g,:,:), k); %matingPool is a vector of chromosomes
+        matingPool=selection(selectionFunction, scores(g,:), M, L, popg, k); %matingPool is a vector of chromosomes
         children = crossover(crossoverFunction, matingPool, pc, L, alpha); %children is a vector of chromosomes
         pop(g+1, :, :) = mutation(mutationFunction, children, pm, lower, upper, b, g, Gmax, n, sigmaVector); 
     end
