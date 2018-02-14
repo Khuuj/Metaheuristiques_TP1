@@ -1,4 +1,4 @@
-function children = simulatedBinaryCrossover(firstParent, secondParent)
+function children = simulatedBinaryCrossover(firstParent, secondParent, ~)
 n=length(firstParent);
 firstChild = zeros(1, n);
 secondChild = zeros(1,n);

@@ -3,17 +3,19 @@ worstIndividuals = zeros(1, lambda);
 if lambda ~= length(popi)
     if tournament == false
         for a=1:lambda
-            worst = scoresI(1);
+            worst = scoresi(1);
+            worstI = 1;
             for j = 2:length(scoresi)
                 if scoresi(j)<worst
-                    worst = j;
+                    worstI = j;
+                    worst = scoresi(j);
                 end
             end
-            worstIndividuals(a) = worst;
-            scoresi(worst)= [];
+            worstIndividuals(a) = worstI;
+            scoresi(worstI)= [];
         end
     else
-        worstIndividuals = tournamentSelection(minimisation(scoresi, lambda, k);
+        worstIndividuals = tournamentSelection(minimisation(scoresi), lambda, k);
     end
     
     nextGen = popi;
