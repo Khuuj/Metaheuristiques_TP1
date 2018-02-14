@@ -60,8 +60,11 @@ function [scores, pop] = main()
     Gmax = 50; %Generation max
     pc = 0.5; %Crossover probability
     pm = 0.1; %Mutation probability
+    lambda = 100 %Number of children
     M = 100; %MatingPool size
     binary = 0; %Encoding mode
+    
+    tournament = true; %determines if tournament selection is used for replacement
     
     %FITNESS AND LIMITATIONS
     fitnessFunction = @rosenbrock;
@@ -134,9 +137,12 @@ function [scores, pop] = main()
         end
         fitnessMean = mean(scores);
 
+        %remplacer M par lambda+mod(lambda, 2)
+        
         matingPool=selection(selectionFunction, scores(g,:), M, L, popg, k); %matingPool is a vector of chromosomes
         children = crossover(crossoverFunction, matingPool, pc, L, alpha); %children is a vector of chromosomes
-        pop(g+1,:,:) = mutation(mutationFunction, children, pm, lower, upper, b, g, Gmax, n, sigmaVector);
+        mutatedChildren = mutation(mutationFunction, children, pm, lower, upper, b, g, Gmax, n, sigmaVector);
+        pop(g+1,:,:) = replacement(pop(g,:,:), scores(g,:), lambda, k, tournament, mutatedChildren);
         pop(g+1,:,:) = testFeasibility(feasibilityFunction, reshape(pop(g+1,:, :), [N, L]), lower, upper, binary);
     end
     
