@@ -51,13 +51,13 @@
 %FLOWCHART
 %initialisation=>(evaluation=>selection=>crossover=>mutation)*Gmax=>
 
-function pop = main()
+function [scores, pop] = main()
     %% CONFIGURATION PART
 
     %GENERAL SETTINGS
     N = 100; %Population size
     L = 2; %Chromosome size (2 in case of real encoding)
-    Gmax = 20; %Generation max
+    Gmax = 50; %Generation max
     pc = 0.5; %Crossover probability
     pm = 0.1; %Mutation probability
     M = 100; %MatingPool size
@@ -65,15 +65,18 @@ function pop = main()
     
     %FITNESS AND LIMITATIONS
     fitnessFunction = @rosenbrock;
+    problemFunction = @max;
     lower = [0 0];
     upper = [2 3];
 %     fitnessFunction = @griewank;
+%     problemFunction = @min;
 %     lower = [-30 -30];
 %     upper = [30 30];
        
 
     %SCALING
-    scalingFunction = @linearScaling;
+    scalingFunction = @nop;
+%     scalingFunction = @linearScaling;
 %     scalingFunction = @sigmaScaling; %need c
     c = 2; %Control parameter : integer between [1,5]
     
@@ -84,38 +87,48 @@ function pop = main()
     k = 2; %size of tournament
     
     %CROSSOVER
-    crossoverFunction = @blendCrossover; %need alpha
-%     crossoverFunction = @localArithmeticCrossover;
+    %%%% BINARY
 %     crossoverFunction = @multiPointCrossover;
 %     crossoverFunction = @singlePointCrossover;
 %     crossoverFunction = @uniformCrossover; 
+    %%%% REAL
+    crossoverFunction = @blendCrossover; %need alpha 
+%     crossoverFunction = @localArithmeticCrossover;
 %     crossoverFunction = @wholeArithmeticCrossover;
     alpha = 0.5; %control the scope of the expansion
     
     %MUTATION
-    mutationFunction = @boundaryMutation;
+    %%%% BINARY
+%     mutationFunction = @bitFlip;
+    %%%% REAL
+%     mutationFunction = @boundaryMutation;
 %     mutationFunction = @nonUniformMutation; %need b
 %     mutationFunction = @normalMutation; %need sigmaVector
 %     mutationFunction = @polynomialMutation; %need n
-%     mutationFunction = @uniformMutation;
+    mutationFunction = @uniformMutation;
     b = 1; %control the speed of the annealing
     %TODO : what value should take sigmaVector ?
     sigmaVector = ones(L,1); %standard deviation vector
     %TODO : what value should take n ?
     n = 1; %control parameter
     
+    %FEASIBILITY
+    feasibilityFunction = @firstMethod;
+    
     %STOPPING CONDITIONS
     threshold = 0; 
-    optimalValue = 10000;
+    optimalValue = 100000;
 
     %% EXECUTION PART
     scores = zeros(Gmax, N); %scores is a matrix of scores
+    oldscores = zeros(Gmax, N);
     pop = zeros(Gmax, N, L); %pop is a matrix of chromosomes
     pop(1,:,:) = initialization(N, L, binary, lower, upper);
     fitnessMean = 0;
     for g=1:Gmax
+        fprintf('Generation %d\n',g);
     	popg = reshape(pop(g,:, :), [N, L]);    
-        scores(g,:)=evaluation(fitnessFunction, popg, scalingFunction, c);
+        [scores(g,:), oldscores(g,:)] = evaluation(fitnessFunction, popg, scalingFunction, c, binary, lower, upper);
         if (stoppingCriteria(scores, fitnessMean, threshold, optimalValue))
             break;
         end
@@ -123,10 +136,41 @@ function pop = main()
 
         matingPool=selection(selectionFunction, scores(g,:), M, L, popg, k); %matingPool is a vector of chromosomes
         children = crossover(crossoverFunction, matingPool, pc, L, alpha); %children is a vector of chromosomes
-        pop(g+1, :, :) = mutation(mutationFunction, children, pm, lower, upper, b, g, Gmax, n, sigmaVector); 
+        pop(g+1,:,:) = mutation(mutationFunction, children, pm, lower, upper, b, g, Gmax, n, sigmaVector);
+        pop(g+1,:,:) = testFeasibility(feasibilityFunction, reshape(pop(g+1,:, :), [N, L]), lower, upper, binary);
     end
+    
+    %% DISPLAY PART
+    [X,Y] = meshgrid(lower(1):.2:upper(1), lower(2):.2:upper(2));   
+    figure
+    surf(X,Y,fitnessFunction(X,Y));
+    
+    format short;
+%     disp(oldscores);
+
+    for i=1:Gmax
+        [maxv, maxi] = problemFunction(scores(i,:));
+        x = pop(i,maxi,1:L/2);
+        y = pop(i,maxi,(L/2)+1:L);
+        if (binary)
+            x = decode(x,L,lower(1),upper(1));
+            y = decode(y,L,lower(2),upper(2));
+        end
+        z = oldscores(i, maxi);
+        fprintf('Max : %4.2f (before normalizing : %4.2f) was found in (%4.2f,%4.2f)\n', maxv, z, x, y);
+        hold on;    
+        
+        if (i == Gmax)
+            plot3(x,y,z, 'r*');
+        else
+            plot3(x,y,z, 'cX');
+        end
+        
+        hold off;
+    end
+    
+
+    
 end
-
-
     
 

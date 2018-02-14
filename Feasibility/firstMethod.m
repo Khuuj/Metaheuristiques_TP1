@@ -1,4 +1,4 @@
-function x = firstMethod(x, upper, lower)
+function x = firstMethod(x, lower, upper)
 if x<lower
     x=lower;
 end

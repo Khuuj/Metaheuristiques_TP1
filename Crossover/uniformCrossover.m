@@ -1,5 +1,9 @@
 function children = uniformCrossover(firstParent, secondParent, ~)
 %TODO : determine p
+% fpScore = ;
+% spScore = ;
+% p = fpScore / (fpScore + spScore);
+p = 0.5;
 
 for i=1:length(firstParent)
     if rand<p

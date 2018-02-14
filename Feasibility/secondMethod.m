@@ -1,4 +1,4 @@
-function x = secondMethod(x, upper, lower)
+function x = secondMethod(x, lower, upper)
 if x<lower
     x=2*lower - x;
 end

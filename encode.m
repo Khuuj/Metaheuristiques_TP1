@@ -1,5 +1,5 @@
-function binary = encode(x, bbase, floor, ceiling)
-inter = (x-floor)/(ceiling-floor)*2^bbase;
-binary = dec2bin(inter);
+function binary = encode(x, L, lower, upper)
+inter = (x-lower)/(upper-lower)*2^L;
+binary = de2bi(inter, L, 'left-msb');
 
 end
