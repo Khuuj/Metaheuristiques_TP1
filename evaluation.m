@@ -12,8 +12,7 @@ function [scores, oldscores] = evaluation(fitnessFunction, popg, scalingFunction
         end       
         assert((x >= lower(1)) && (x <= upper(1)), 'A chromosome has a X that does not respect its boundary : %d', x);
         assert((y >= lower(2)) && (y <= upper(2)), 'A chromosome has a Y that does not respect its boundary : %d', y);
-        result = fitnessFunction(x,y);
-        scores(i) = result;
+        scores(i) = fitnessFunction(x,y);
     end
     
     % Keep track of scores values before modifications
@@ -24,7 +23,6 @@ function [scores, oldscores] = evaluation(fitnessFunction, popg, scalingFunction
     if (minValue < 0)
         scores = scores + 2*abs(minValue);
     end
-    
     assert(min(scores)>0, 'ERROR : some scores values are negatives');
     
     % SCALING
