@@ -33,11 +33,13 @@ function main()
     
     %RANKING
 %    rankingFunction = @nop;
-     rankingFunction = @firstLinearRanking;
-%     rankingFunction = @secondLinearRanking;
-%     rankingFunction = @nonLinearRanking;
-alphaRanking = 0.2;
-    
+%      rankingFunction = @firstLinearRanking;
+%    rankingFunction = @secondLinearRanking;
+     rankingFunction = @nonLinearRanking;
+alphaRanking = 1.7;
+r=2/N^2;
+nonLinearAlpha = 0.9;
+
     %SELECTION
     selectionFunction = @rws;
 %      selectionFunction = @stochasticUniversalSampling;
@@ -98,7 +100,7 @@ alphaRanking = 0.2;
         end
         fitnessMean = mean(oldscores(g,:));
         % SELECTION
-        rankedScores = rankingFunction(scores(g,:), alphaRanking);
+        rankedScores = ranking(rankingFunction,scores(g,:), alphaRanking, r, nonLinearAlpha);
         matingPool=selection(selectionFunction, rankedScores, M, L, popg, k); %matingPool is a vector of chromosomes
         % CROSSOVER
         children = crossover(crossoverFunction, matingPool, pc, L, alpha); %children is a vector of chromosomes
