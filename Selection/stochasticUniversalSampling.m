@@ -4,9 +4,9 @@ function selected = stochasticUniversalSampling(scoresg, M, ~)
     selected = zeros(M,1);
     sumScore = sum(scoresg);
     for i=1:M
-        arrow = (r+(i-1)*angle)*sum(scoresg);
-        if arrow>=sum(scoresg)
-            arrow = arrow-sum(scoresg);
+        arrow = (r+(i-1)*angle)*sumScore;
+        if arrow>=sumScore
+            arrow = arrow-sumScore;
         end
         compteur = 0;
         while arrow >= 0

@@ -1,5 +1,7 @@
-function mutatedChild = normalMutation(child, pm, ~, ~, ~, ~, ~, ~, sigmaVector)
-%TODO : check pm not needed here ?
-	norm = normrnd(0,1,1,length(child));
-	mutatedChild=child+norm.*sigmaVector;
+function child = normalMutation(child, pm, ~, ~, ~, ~, ~, ~, sigmaVector)
+for i=1:length(child)
+    if rand<pm
+        child(i) = child(i)+normrnd(0,1)*sigmaVector(i);
+    end
+end
 end
