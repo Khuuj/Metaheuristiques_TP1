@@ -11,7 +11,7 @@ function main()
     M = lambda+mod(lambda, 2); %MatingPool size
     binary = 0; %Encoding mode
     
-    tournament = true; %determines if tournament selection is used for replacement
+    tournament = false; %determines if tournament selection is used for replacement
     
     %FITNESS AND LIMITATIONS
     fitnessFunction = @rosenbrock;
