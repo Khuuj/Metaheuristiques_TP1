@@ -57,7 +57,7 @@ function main()
     %%%% REAL
 %     mutationFunction = @boundaryMutation;
 %     mutationFunction = @nonUniformMutation; %need b
-    mutationFunction = @normalMutation; %need sigmaVector
+    mutationFunction = @normalMutation; %need sigma
 %     mutationFunction = @polynomialMutation; %need n
 %     mutationFunction = @uniformMutation;
     b = 1; %control the speed of the annealing
