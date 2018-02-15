@@ -1,8 +1,12 @@
-function nextGen = replacement(popi, scoresi, lambda, k, tournament, children)
+function nextGen = replacement(popi, scoresi, lambda, k, tournament, children, problemFunction)
     % This function allows a partial remplacement of one generation to another
     % The goal is to keep the best values and replace the worst ones
 worstIndividuals = zeros(1, lambda);
 if lambda ~= length(popi)
+    
+    if isequal(problemFunction, @min)
+        scoresi=minimisation(scoresi);
+    end
     if tournament == false
         scoresTemp = scoresi;
         for a=1:lambda

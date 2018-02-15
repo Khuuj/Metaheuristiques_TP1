@@ -14,14 +14,14 @@ function main()
     tournament = false; %determines if tournament selection is used for replacement
     
     %FITNESS AND LIMITATIONS
-    fitnessFunction = @rosenbrock;
-    problemFunction = @max;
-    lower = [0 0];
-    upper = [2 3];
-%     fitnessFunction = @griewank;
-%     problemFunction = @min;
-%     lower = [-30 -30];
-%     upper = [30 30];
+%     fitnessFunction = @rosenbrock;
+%     problemFunction = @max;
+%     lower = [0 0];
+%     upper = [2 3];
+    fitnessFunction = @griewank;
+    problemFunction = @min;
+    lower = [-30 -30];
+    upper = [30 30];
        
 
     %SCALING
@@ -88,7 +88,7 @@ function main()
         matingPool=selection(selectionFunction, scores(g,:), M, L, popg, k); %matingPool is a vector of chromosomes
         children = crossover(crossoverFunction, matingPool, pc, L, alpha); %children is a vector of chromosomes
         mutatedChildren = mutation(mutationFunction, children, pm, lower, upper, b, g, Gmax, n, sigmaVector);
-        pop(g+1,:,:) = replacement(pop(g,:,:), scores(g,:), lambda, k, tournament, mutatedChildren);
+        pop(g+1,:,:) = replacement(pop(g,:,:), scores(g,:), lambda, k, tournament, mutatedChildren, problemFunction);
         pop(g+1,:,:) = testFeasibility(feasibilityFunction, reshape(pop(g+1,:, :), [N, L]), lower, upper, binary);
     end
     if (g == Gmax)
