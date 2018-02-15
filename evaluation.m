@@ -1,4 +1,4 @@
-function [scores, oldscores] = evaluation(fitnessFunction, popg, scalingFunction, c, binary, lower, upper, problemFunction)
+function [scores, oldscores] = evaluation(fitnessFunction, popg, scalingFunction, c, binary, lower, upper)
     N = size(popg,1);
     L = size(popg,2);
     scores = zeros(N, 1); 
@@ -27,9 +27,4 @@ function [scores, oldscores] = evaluation(fitnessFunction, popg, scalingFunction
     
     % SCALING
     scores = scalingFunction(scores, c);
-    
-    % MINIMISATION CASE
-    if (isequal(problemFunction, @min))
-       scores = minimisation(scores);
-    end
 end

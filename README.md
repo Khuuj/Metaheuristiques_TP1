@@ -2,6 +2,11 @@
 
 ## Todo
 
+
+## Done
+
+-  [~~varargin~~](https://www.mathworks.com/help/matlab/ref/varargin.html "") 
+- result graph
 - binary evaluation
 - steady state
 - simulated binary crossover
@@ -9,14 +14,10 @@
 - one crossover we need to find in literature
 - find values for some configurations variables
 
-## Done
-
--  [~~varargin~~](https://www.mathworks.com/help/matlab/ref/varargin.html "") 
-- result graph
-
 ## Variation operators
 
 ### Crossovers
+  - shuffle crossover (binary)
   - multipoint crossover                              (binary)
   - uniform crossover                  (binary)
   - whole arithmetic crossover                        (real)

@@ -25,7 +25,7 @@ function displayLastGen(fitnessFunction, problemFunction, pop, lower, upper, Gma
     end
     
     % Display differently the chromosome with the extremum fitness
-    [maxv, maxi] = problemFunction(scoresLG(Gmax+1,:));
+    [maxv, maxi] = problemFunction(scoresLG(:));
     x = popLG(maxi,1:L/2);
     y = popLG(maxi,(L/2)+1:L);
     if (binary)
@@ -34,7 +34,7 @@ function displayLastGen(fitnessFunction, problemFunction, pop, lower, upper, Gma
     end
     z = oldscoresLG(maxi);
     format short;
-    fprintf('Max/Min : %4.2f (before normalizing : %4.2f) was found in (%4.2f,%4.2f)\n', maxv, z, x, y);
+    fprintf('Max/Min of last generation : %4.4f was found in (%4.2f,%4.2f)\n', z, x, y);
     hold on;
     plot3(x,y,z, 'r*');
     hold off;

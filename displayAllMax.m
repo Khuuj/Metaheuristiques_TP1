@@ -8,6 +8,7 @@ function displayAllMax(fitnessFunction, problemFunction, pop, lower, upper, Gmax
 
     % Go through all generations
     for i=1:Gmax+1
+        fprintf('Generation %d ',i);
         [maxv, maxi] = problemFunction(scores(i,:));
         x = pop(i,maxi,1:L/2);
         y = pop(i,maxi,(L/2)+1:L);
@@ -16,7 +17,7 @@ function displayAllMax(fitnessFunction, problemFunction, pop, lower, upper, Gmax
             y = decode(y,L,lower(2),upper(2));
         end
         z = oldscores(i, maxi);
-        fprintf('Max : %4.2f (before normalizing : %4.2f) was found in (%4.2f,%4.2f)\n', maxv, z, x, y);
+        fprintf('Max/Min : %4.4f was found in (%4.2f,%4.2f)\n', z, x, y);
         hold on;    
 
         % Display differently the extremum of the last generation
