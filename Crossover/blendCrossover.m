@@ -9,13 +9,12 @@ function children = blendCrossover(firstParent, secondParent, alpha)
         % x2 the smallest 
         x1 = min(firstParent(i), secondParent(i));
         x2 = max(firstParent(i), secondParent(i));
-        firstChild(i) = random((x1 - alpha*delta),(x2 + alpha*delta));
-        secondChild(i) = random((x1 - alpha*delta),(x2 + alpha*delta));
+        
+        a= x1 - alpha*delta;
+        b= x2 + alpha*delta;
+        firstChild(i) = a+ (b-a)*rand;
+        secondChild(i) = a+ (b-a)*rand;
     end
     
     children = [firstChild ; secondChild];
-end
-
-function x = random(a, b)
-    x = a + (b-a)*rand;
 end

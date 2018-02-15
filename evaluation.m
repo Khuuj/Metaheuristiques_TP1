@@ -1,4 +1,4 @@
-function [scores, oldscores] = evaluation(fitnessFunction, popg, scalingFunction, c, binary, lower, upper)
+function [scores, oldscores] = evaluation(fitnessFunction, popg, scalingFunction, c, binary, lower, upper, problemFunction)
     N = size(popg,1);
     L = size(popg,2);
     scores = zeros(N, 1); 
@@ -7,8 +7,8 @@ function [scores, oldscores] = evaluation(fitnessFunction, popg, scalingFunction
         x = popg(i,1:L/2);
         y = popg(i,(L/2)+1:L);
         if (binary)
-            x = decode(x,L,lower(1),upper(1));
-            y = decode(y,L,lower(2),upper(2));
+            x = decode(x,L/2,lower(1),upper(1));
+            y = decode(y,L/2,lower(2),upper(2));
         end       
         assert((x >= lower(1)) && (x <= upper(1)), 'A chromosome has a X that does not respect its boundary : %d', x);
         assert((y >= lower(2)) && (y <= upper(2)), 'A chromosome has a Y that does not respect its boundary : %d', y);
@@ -24,6 +24,10 @@ function [scores, oldscores] = evaluation(fitnessFunction, popg, scalingFunction
         scores = scores + 2*abs(minValue);
     end
     assert(min(scores)>0, 'ERROR : some scores values are negatives');
+    
+    if isequal(problemFunction, @min)
+        scores=minimisation(scores);
+    end
     
     % SCALING
     scores = scalingFunction(scores, c);

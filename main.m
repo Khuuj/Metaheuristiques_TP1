@@ -7,7 +7,7 @@ function main()
     Gmax = 50; %Generation max
     pc = 0.8; %Crossover probability
     pm = 0.01; %Mutation probability
-    lambda = N/10; %Number of children
+    lambda = 10; %Number of children
     M = lambda+mod(lambda, 2); %MatingPool size
     binary = 0; %Encoding mode
     
@@ -18,7 +18,7 @@ function main()
 %     lower = [0 0];
 %     upper = [2 3];
 %     goodValue = -0.02; % Used for experimentation, save generation number when this value is reached
-    %%% GRIEWANK
+     %%% GRIEWANK
     fitnessFunction = @griewank;
     problemFunction = @min;
     lower = [-30 -30];
@@ -31,10 +31,17 @@ function main()
 %     scalingFunction = @sigmaScaling; %need c
     c = 2; %Control parameter : integer between [1,5]
     
+    %RANKING
+%    rankingFunction = @nop;
+     rankingFunction = @firstLinearRanking;
+%     rankingFunction = @secondLinearRanking;
+%     rankingFunction = @nonLinearRanking;
+alphaRanking = 0.2;
+    
     %SELECTION
-%    selectionFunction = @rws;
+    selectionFunction = @rws;
 %      selectionFunction = @stochasticUniversalSampling;
-    selectionFunction = @tournamentSelection; %need k
+%    selectionFunction = @tournamentSelection; %need k
     k = 2; %size of tournament
     
     %CROSSOVER
@@ -44,8 +51,8 @@ function main()
 %     crossoverFunction = @uniformCrossover; 
 %     crossoverFunction = @shuffleCrossover; 
     %%%% REAL
-    crossoverFunction = @blendCrossover; %need alpha    
-%     crossoverFunction = @localArithmeticCrossover;
+%    crossoverFunction = @blendCrossover; %need alpha    
+    crossoverFunction = @localArithmeticCrossover;
 %     crossoverFunction = @wholeArithmeticCrossover;
     alpha = 0.5; %control the scope of the expansion
     
@@ -55,15 +62,15 @@ function main()
     %%%% REAL
 %     mutationFunction = @boundaryMutation;
 %     mutationFunction = @nonUniformMutation; %need b
-%     mutationFunction = @normalMutation; %need sigma
-    mutationFunction = @polynomialMutation; %need n
+    mutationFunction = @normalMutation; %need sigma
+%    mutationFunction = @polynomialMutation; %need n
 %     mutationFunction = @uniformMutation;
     b = 1; %control the speed of the annealing
     sigma = 1; %standard deviation vector
     n = 1; %control parameter
     
     %REPLACEMENT
-    tournament = false; % False for kill worst, True for kill tournament
+    tournament = true; % False for kill worst, True for kill tournament
     
     %FEASIBILITY
     feasibilityFunction = @firstMethod;
@@ -83,7 +90,7 @@ function main()
     for g=1:Gmax 
     	popg = reshape(pop(g,:, :), [N, L]);    
         % EVALUATION
-        [scores(g,:), oldscores(g,:)] = evaluation(fitnessFunction, popg, scalingFunction, c, binary, lower, upper); 
+        [scores(g,:), oldscores(g,:)] = evaluation(fitnessFunction, popg, scalingFunction, c, binary, lower, upper, problemFunction); 
         if (stoppingCriteria(oldscores, fitnessMean, threshold, optimalValue, problemFunction, g, N))
             fprintf('Generation %d ',g);
             displayLastGen(fitnessFunction, problemFunction, pop, lower, upper, g-1, N, L, scores, oldscores, binary);
@@ -91,7 +98,8 @@ function main()
         end
         fitnessMean = mean(oldscores(g,:));
         % SELECTION
-        matingPool=selection(selectionFunction, scores(g,:), M, L, popg, k); %matingPool is a vector of chromosomes
+        rankedScores = rankingFunction(scores(g,:), alphaRanking);
+        matingPool=selection(selectionFunction, rankedScores, M, L, popg, k); %matingPool is a vector of chromosomes
         % CROSSOVER
         children = crossover(crossoverFunction, matingPool, pc, L, alpha); %children is a vector of chromosomes
         % MUTATION
@@ -104,9 +112,9 @@ function main()
     %% DISPLAY PART
     if (g == Gmax)
         popg = reshape(pop(Gmax+1,:, :), [N, L]);
-        [scores(Gmax+1,:), oldscores(Gmax+1,:)] = evaluation(fitnessFunction, popg, scalingFunction, c, binary, lower, upper);
-        gen = displayAllMax(fitnessFunction, problemFunction, pop, lower, upper, Gmax, L, scores, oldscores, binary, goodValue);
-        displayLastGen(fitnessFunction, problemFunction, pop, lower, upper, Gmax, N, L, scores, oldscores, binary);
+        [scores(Gmax+1,:), oldscores(Gmax+1,:)] = evaluation(fitnessFunction, popg, scalingFunction, c, binary, lower, upper, problemFunction);
+        gen = displayAllOptima(problemFunction, pop, lower, upper, Gmax, N, L, oldscores, binary, goodValue);
+        displayLastGen(fitnessFunction, problemFunction, pop, lower, upper, Gmax, N, L, oldscores, binary);
         fprintf("GENERATION %d\n",gen);
     end
     

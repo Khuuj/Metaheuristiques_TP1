@@ -4,9 +4,6 @@ function nextGen = replacement(popi, scoresi, lambda, k, tournament, children, p
 worstIndividuals = zeros(1, lambda);
 if lambda ~= length(popi)
     
-    if isequal(problemFunction, @min)
-        scoresi=minimisation(scoresi);
-    end
     if tournament == false
         scoresTemp = scoresi;
         for a=1:lambda
