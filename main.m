@@ -13,22 +13,22 @@ function main()
     
     %FITNESS AND LIMITATIONS
     %%% ROSENBROCK
-    fitnessFunction = @rosenbrock;
-    problemFunction = @max;
-    lower = [0 0];
-    upper = [2 3];
-    goodValue = -0.02; % Used for experimentation, save generation number when this value is reached
+%     fitnessFunction = @rosenbrock;
+%     problemFunction = @max;
+%     lower = [0 0];
+%     upper = [2 3];
+%     goodValue = -0.02; % Used for experimentation, save generation number when this value is reached
     %%% GRIEWANK
-%     fitnessFunction = @griewank;
-%     problemFunction = @min;
-%     lower = [-30 -30];
-%     upper = [30 30];
-%     goodValue = 0.02;
+    fitnessFunction = @griewank;
+    problemFunction = @min;
+    lower = [-30 -30];
+    upper = [30 30];
+    goodValue = 0.02;
        
     %SCALING
-%     scalingFunction = @nop;
+    scalingFunction = @nop;
 %     scalingFunction = @linearScaling;
-    scalingFunction = @sigmaScaling; %need c
+%     scalingFunction = @sigmaScaling; %need c
     c = 2; %Control parameter : integer between [1,5]
     
     %SELECTION
@@ -44,26 +44,26 @@ function main()
 %     crossoverFunction = @uniformCrossover; 
 %     crossoverFunction = @shuffleCrossover; 
     %%%% REAL
-%     crossoverFunction = @blendCrossover; %need alpha    
+    crossoverFunction = @blendCrossover; %need alpha    
 %     crossoverFunction = @localArithmeticCrossover;
-    crossoverFunction = @wholeArithmeticCrossover;
+%     crossoverFunction = @wholeArithmeticCrossover;
     alpha = 0.5; %control the scope of the expansion
     
     %MUTATION
     %%%% BINARY
 %     mutationFunction = @bitFlip;
     %%%% REAL
-    mutationFunction = @boundaryMutation;
+%     mutationFunction = @boundaryMutation;
 %     mutationFunction = @nonUniformMutation; %need b
 %     mutationFunction = @normalMutation; %need sigma
-%     mutationFunction = @polynomialMutation; %need n
+    mutationFunction = @polynomialMutation; %need n
 %     mutationFunction = @uniformMutation;
     b = 1; %control the speed of the annealing
     sigma = 1; %standard deviation vector
     n = 1; %control parameter
     
     %REPLACEMENT
-    tournament = true; % False for kill worst, True for kill tournament
+    tournament = false; % False for kill worst, True for kill tournament
     
     %FEASIBILITY
     feasibilityFunction = @firstMethod;

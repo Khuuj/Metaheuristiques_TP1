@@ -5,7 +5,7 @@ function selected = tournamentSelection(scoresg, M, k)
         for i=1:k
             % Select a random chromosome to challenge the current best chromosome
             pos = randi(length(scoresg));
-            if best < scoresg(pos)
+            if best <= scoresg(pos)
                 best = scoresg(pos);
                 indice = pos;
             end

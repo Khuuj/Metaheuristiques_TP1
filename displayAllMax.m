@@ -1,8 +1,8 @@
 function gen = displayAllMax(fitnessFunction, problemFunction, pop, lower, upper, Gmax, L, scores, oldscores, binary, goodValue)
     % Display chromosome with extremum fitness foreach generation
-    [X,Y] = meshgrid(lower(1):.2:upper(1), lower(2):.2:upper(2));   
-    figure
-    surf(X,Y,fitnessFunction(X,Y));
+%     [X,Y] = meshgrid(lower(1):.2:upper(1), lower(2):.2:upper(2));   
+%     figure
+%     surf(X,Y,fitnessFunction(X,Y));
     
     format short;
     bit = 1;
@@ -19,16 +19,16 @@ function gen = displayAllMax(fitnessFunction, problemFunction, pop, lower, upper
         end
         z = oldscores(i, maxi);
         fprintf('Max/Min : %4.4f was found in (%4.2f,%4.2f)\n', z, x, y);
-        hold on;    
-
-        % Display differently the extremum of the last generation
-        if (i == Gmax+1)
-            plot3(x,y,z, 'r*');
-        else
-            plot3(x,y,z, 'cX');
-        end
-
-        hold off;
+%         hold on;    
+% 
+%         % Display differently the extremum of the last generation
+%         if (i == Gmax+1)
+%             plot3(x,y,z, 'r*');
+%         else
+%             plot3(x,y,z, 'cX');
+%         end
+% 
+%         hold off;
         
         if (bit && problemFunction(z,goodValue) == z)
             gen = i;
