@@ -1,11 +1,12 @@
-function displayAllMax(fitnessFunction, problemFunction, pop, lower, upper, Gmax, L, scores, oldscores, binary)
+function gen = displayAllMax(fitnessFunction, problemFunction, pop, lower, upper, Gmax, L, scores, oldscores, binary, goodValue)
     % Display chromosome with extremum fitness foreach generation
     [X,Y] = meshgrid(lower(1):.2:upper(1), lower(2):.2:upper(2));   
     figure
     surf(X,Y,fitnessFunction(X,Y));
 
     format short;
-
+    bit = 1;
+    gen = 0;
     % Go through all generations
     for i=1:Gmax+1
         fprintf('Generation %d ',i);
@@ -28,5 +29,10 @@ function displayAllMax(fitnessFunction, problemFunction, pop, lower, upper, Gmax
         end
 
         hold off;
+        
+        if (bit && problemFunction(z,goodValue) == z)
+            gen = i;
+            bit = 0; 
+        end
     end
 end
