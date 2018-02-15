@@ -35,8 +35,8 @@ function main()
     c = 2; %Control parameter : integer between [1,5]
     
     %SELECTION
-    selectionFunction = @rws;
-%     selectionFunction = @stochasticUniversalSampling;
+%    selectionFunction = @rws;
+     selectionFunction = @stochasticUniversalSampling;
 %     selectionFunction = @tournamentSelection; %need k
     k = 2; %size of tournament
     
