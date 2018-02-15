@@ -11,32 +11,32 @@ function main()
     M = lambda+mod(lambda, 2); %MatingPool size
     binary = 0; %Encoding mode
     
-    tournament = true; %determines if tournament selection is used for replacement
+    %REPLACEMENT
+    tournament = false; % False for kill worst, True for kill tournament
     
     %FITNESS AND LIMITATIONS
     %%% ROSENBROCK
-    fitnessFunction = @rosenbrock;
-    problemFunction = @max;
-    lower = [0 0];
-    upper = [2 3];
-    goodValue = -0.02;
+%     fitnessFunction = @rosenbrock;
+%     problemFunction = @max;
+%     lower = [0 0];
+%     upper = [2 3];
+%     goodValue = -0.02;
     %%% GRIEWANK
-%     fitnessFunction = @griewank;
-%     problemFunction = @min;
-%     lower = [-30 -30];
-%     upper = [30 30];
-%     goodValue = 0.02;
+    fitnessFunction = @griewank;
+    problemFunction = @min;
+    lower = [-30 -30];
+    upper = [30 30];
+    goodValue = 0.02;
        
-
     %SCALING
-    scalingFunction = @nop;
+%     scalingFunction = @nop;
 %     scalingFunction = @linearScaling;
-%     scalingFunction = @sigmaScaling; %need c
+    scalingFunction = @sigmaScaling; %need c
     c = 2; %Control parameter : integer between [1,5]
     
     %SELECTION
-%    selectionFunction = @rws;
-     selectionFunction = @stochasticUniversalSampling;
+   selectionFunction = @rws;
+%      selectionFunction = @stochasticUniversalSampling;
 %     selectionFunction = @tournamentSelection; %need k
     k = 2; %size of tournament
     
@@ -46,9 +46,9 @@ function main()
 %     crossoverFunction = @singlePointCrossover;
 %     crossoverFunction = @uniformCrossover; 
     %%%% REAL
-    crossoverFunction = @blendCrossover; %need alpha 
+%     crossoverFunction = @blendCrossover; %need alpha 
 %     crossoverFunction = @localArithmeticCrossover;
-%     crossoverFunction = @wholeArithmeticCrossover;
+    crossoverFunction = @wholeArithmeticCrossover;
     alpha = 0.5; %control the scope of the expansion
     
     %MUTATION
@@ -57,13 +57,11 @@ function main()
     %%%% REAL
 %     mutationFunction = @boundaryMutation;
 %     mutationFunction = @nonUniformMutation; %need b
-%     mutationFunction = @normalMutation; %need sigmaVector
+    mutationFunction = @normalMutation; %need sigmaVector
 %     mutationFunction = @polynomialMutation; %need n
-    mutationFunction = @uniformMutation;
+%     mutationFunction = @uniformMutation;
     b = 1; %control the speed of the annealing
-    %TODO : what value should take sigmaVector ?
-    sigmaVector = ones(L,1); %standard deviation vector
-    %TODO : what value should take n ?
+    sigma = 1; %standard deviation vector
     n = 1; %control parameter
     
     %FEASIBILITY
@@ -93,7 +91,7 @@ function main()
         
         matingPool=selection(selectionFunction, scores(g,:), M, L, popg, k); %matingPool is a vector of chromosomes
         children = crossover(crossoverFunction, matingPool, pc, L, alpha); %children is a vector of chromosomes
-        mutatedChildren = mutation(mutationFunction, children, pm, lower, upper, b, g, Gmax, n, sigmaVector);
+        mutatedChildren = mutation(mutationFunction, children, pm, lower, upper, b, g, Gmax, n, sigma);
         pop(g+1,:,:) = replacement(pop(g,:,:), scores(g,:), lambda, k, tournament, mutatedChildren, problemFunction);
         pop(g+1,:,:) = testFeasibility(feasibilityFunction, reshape(pop(g+1,:, :), [N, L]), lower, upper, binary);
     end
