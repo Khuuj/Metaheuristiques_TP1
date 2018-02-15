@@ -3,7 +3,7 @@ function gen = displayAllMax(fitnessFunction, problemFunction, pop, lower, upper
     [X,Y] = meshgrid(lower(1):.2:upper(1), lower(2):.2:upper(2));   
     figure
     surf(X,Y,fitnessFunction(X,Y));
-
+    
     format short;
     bit = 1;
     gen = 0;

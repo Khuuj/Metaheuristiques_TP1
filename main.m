@@ -94,7 +94,7 @@ function main()
         matingPool=selection(selectionFunction, scores(g,:), M, L, popg, k); %matingPool is a vector of chromosomes
         children = crossover(crossoverFunction, matingPool, pc, L, alpha); %children is a vector of chromosomes
         mutatedChildren = mutation(mutationFunction, children, pm, lower, upper, b, g, Gmax, n, sigmaVector);
-        pop(g+1,:,:) = replacement(pop(g,:,:), scores(g,:), lambda, k, tournament, mutatedChildren);
+        pop(g+1,:,:) = replacement(pop(g,:,:), scores(g,:), lambda, k, tournament, mutatedChildren, problemFunction);
         pop(g+1,:,:) = testFeasibility(feasibilityFunction, reshape(pop(g+1,:, :), [N, L]), lower, upper, binary);
     end
     if (g == Gmax)

@@ -6,7 +6,7 @@ n = length(ranks);
 %q is calculated with r
 q = r*(n-1)/2 + 1/n;
 
-probabilities = zeros(n);
+probabilities = zeros(1, n);
 for i = 1:n
     probabilities(i) = q-(ranks(i)-1)*r;
 end

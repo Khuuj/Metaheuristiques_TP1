@@ -5,7 +5,7 @@ function probabilities = firstLinearRanking(ranks, alpha)
 beta = 2 - alpha; 
 
 n = length(ranks);
-probabilities = zeros(n, 1);
+probabilities = zeros(1, n);
 for i = 1:n
     probabilities(i) = (alpha+rank(i)*(beta-alpha)/(n-1))/n;
 end
