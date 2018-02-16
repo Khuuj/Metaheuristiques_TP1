@@ -3,27 +3,27 @@ function main()
 
     %GENERAL SETTINGS
     N = 100; %Population size
-    L = 2; %Chromosome size (2 in case of real encoding)
+    L = 24; %Chromosome size (2 in case of real encoding)
     Gmax = 50; %Generation max
     pc = 0.8; %Crossover probability
     pm = 0.01; %Mutation probability
-    lambda = 10; %Number of children
+    lambda = 100; %Number of children
     M = lambda+mod(lambda, 2); %MatingPool size
-    binary = 0; %Encoding mode
+    binary = 1; %Encoding mode
     
     %FITNESS AND LIMITATIONS
     %%% ROSENBROCK
-%     fitnessFunction = @rosenbrock;
-%     problemFunction = @max;
-%     lower = [0 0];
-%     upper = [2 3];
-%     goodValue = -0.02; % Used for experimentation, save generation number when this value is reached
+    fitnessFunction = @rosenbrock;
+    problemFunction = @max;
+    lower = [0 0];
+    upper = [2 3];
+    goodValue = -0.02; % Used for experimentation, save generation number when this value is reached
      %%% GRIEWANK
-    fitnessFunction = @griewank;
-    problemFunction = @min;
-    lower = [-30 -30];
-    upper = [30 30];
-    goodValue = 0.02;
+%     fitnessFunction = @griewank;
+%     problemFunction = @min;
+%     lower = [-30 -30];
+%     upper = [30 30];
+%     goodValue = 0.02;
        
     %SCALING
     scalingFunction = @nop;
@@ -32,39 +32,39 @@ function main()
     c = 2; %Control parameter : integer between [1,5]
     
     %RANKING
-%    rankingFunction = @nop;
-%      rankingFunction = @firstLinearRanking;
+%     rankingFunction = @nop;
+     rankingFunction = @firstLinearRanking;
 %    rankingFunction = @secondLinearRanking;
-     rankingFunction = @nonLinearRanking;
-alphaRanking = 1.7;
-r=2/N^2;
-nonLinearAlpha = 0.9;
+%     rankingFunction = @nonLinearRanking;
+    alphaRanking = 1.7;
+    r=2/N^2;
+    nonLinearAlpha = 0.9;
 
     %SELECTION
-    selectionFunction = @rws;
+%     selectionFunction = @rws;
 %      selectionFunction = @stochasticUniversalSampling;
-%    selectionFunction = @tournamentSelection; %need k
+   selectionFunction = @tournamentSelection; %need k
     k = 2; %size of tournament
     
     %CROSSOVER
     %%%% BINARY
 %     crossoverFunction = @multiPointCrossover;
-%     crossoverFunction = @singlePointCrossover;
+     crossoverFunction = @singlePointCrossover;
 %     crossoverFunction = @uniformCrossover; 
 %     crossoverFunction = @shuffleCrossover; 
     %%%% REAL
 %    crossoverFunction = @blendCrossover; %need alpha    
-    crossoverFunction = @localArithmeticCrossover;
+%     crossoverFunction = @localArithmeticCrossover;
 %     crossoverFunction = @wholeArithmeticCrossover;
     alpha = 0.5; %control the scope of the expansion
     
     %MUTATION
     %%%% BINARY
-%     mutationFunction = @bitFlip;
+    mutationFunction = @bitFlip;
     %%%% REAL
 %     mutationFunction = @boundaryMutation;
 %     mutationFunction = @nonUniformMutation; %need b
-    mutationFunction = @normalMutation; %need sigma
+%     mutationFunction = @normalMutation; %need sigma
 %    mutationFunction = @polynomialMutation; %need n
 %     mutationFunction = @uniformMutation;
     b = 1; %control the speed of the annealing
@@ -76,6 +76,7 @@ nonLinearAlpha = 0.9;
     
     %FEASIBILITY
     feasibilityFunction = @firstMethod;
+    %feasibilityFunction = @secondMethod;
     
     %STOPPING CONDITIONS
     threshold = 0; 
