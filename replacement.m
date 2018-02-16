@@ -18,7 +18,7 @@ if lambda ~= length(popi)
     
     nextGen = popi;
     for b = 1:lambda
-        nextGen(1,worstIndividuals(b),:) = children(b);
+        nextGen(1,worstIndividuals(b),:) = children(b,:);
     end   
 else 
     nextGen = children;
